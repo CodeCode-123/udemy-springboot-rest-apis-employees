@@ -1,0 +1,9 @@
+2026-02-13 16:31:41.035813-05:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * [*]FORM users"; SQL statement:
+SELECT * FORM users [42000-240]
+2026-02-13 16:40:52.021332-05:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+SELECT * FROM users [42102-240]
+2026-02-13 16:54:41.761925-05:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+SELECT * FROM users [42102-240]
