@@ -1,0 +1,27 @@
+package com.luv2code.springboot.employees.controller;
+
+import com.luv2code.springboot.employees.dao.EmployeeDAO;
+import com.luv2code.springboot.employees.entity.Employee;
+import com.luv2code.springboot.employees.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.swing.plaf.PanelUI;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/employees")
+public class EmployeeRestController {
+    private EmployeeService employeeService;
+    @Autowired
+    public EmployeeRestController(EmployeeService theEmployeeService) {
+        this.employeeService = theEmployeeService;
+    }
+    @GetMapping
+    public List<Employee> findAll() {
+        return employeeService.findAll();
+    }
+}
