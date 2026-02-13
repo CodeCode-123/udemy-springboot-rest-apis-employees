@@ -1,27 +1,57 @@
 package com.luv2code.springboot.employees.controller;
-
-import com.luv2code.springboot.employees.dao.EmployeeDAO;
 import com.luv2code.springboot.employees.entity.Employee;
+import com.luv2code.springboot.employees.request.EmployeeRequest;
 import com.luv2code.springboot.employees.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.swing.plaf.PanelUI;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
+@Tag(name="Employee Rest API Endpoints", description = "Operations related to employees.")
 public class EmployeeRestController {
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
     @Autowired
     public EmployeeRestController(EmployeeService theEmployeeService) {
         this.employeeService = theEmployeeService;
     }
-    @GetMapping
+
+    @Operation(summary="Get all employees", description = "Retrieve a list of all employees.")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping()
     public List<Employee> findAll() {
         return employeeService.findAll();
+    }
+
+    @Operation(summary="Fetch single employee", description="Get a single employee from database.")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{employeeId}")
+    public Employee getEmployeeById(@PathVariable("employeeId") @Min(value=1) long employeeId) {
+        return employeeService.findById(employeeId);
+    }
+
+    @Operation(summary="Create a new employee", description = "Add a new employee to database.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping()
+    public Employee addEmployee(@Valid @RequestBody EmployeeRequest theEmployeeRequest) {
+        return employeeService.save(theEmployeeRequest);
+    }
+    @Operation(summary="Update an employee", description="Update the details of a current employee.")
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{employeeId}")
+    public Employee updateEmployee(@PathVariable @Min(value=1) long employeeId,
+                                   @Valid @RequestBody EmployeeRequest theEmployeeRequest) {
+        return employeeService.update(employeeId, theEmployeeRequest);
+    }
+    @Operation(summary="Delete a employee", description = "Remove an employee from the database.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{employeeId}")
+    public void deleteEmployee(@PathVariable @Min(value=1) long employeeId) {
+        employeeService.deleteById(employeeId);
     }
 }

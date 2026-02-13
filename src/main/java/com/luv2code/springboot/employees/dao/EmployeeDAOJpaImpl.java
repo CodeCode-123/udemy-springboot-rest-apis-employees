@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public class EmployeeDAOJpaImpl implements EmployeeDAO {
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
     @Autowired
     public EmployeeDAOJpaImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -16,5 +16,21 @@ public class EmployeeDAOJpaImpl implements EmployeeDAO {
     @Override
     public List<Employee> findAll() {
         return entityManager.createQuery("FROM Employee", Employee.class).getResultList();
+    }
+
+    @Override
+    public Employee findById(long theId) {
+        return entityManager.find(Employee.class, theId);
+    }
+
+    @Override
+    public Employee save(Employee theEmployee) {
+        return entityManager.merge(theEmployee);
+    }
+
+    @Override
+    public void deleteById(long theId) {
+        Employee theEmployee = entityManager.find(Employee.class, theId);
+        entityManager.remove(theEmployee);
     }
 }
